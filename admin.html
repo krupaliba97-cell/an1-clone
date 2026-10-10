@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="AN1 Clone Admin Dashboard - Manage Apps securely">
     <link rel="icon" href="https://via.placeholder.com/32/54b247/ffffff?text=A" type="image/png">
-    <title>Admin Dashboard - AN1 Pro Clone</title>
+    <title>Secure Admin Dashboard - AN1 Pro Clone</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
         body { background: var(--bg-color); }
@@ -16,7 +16,11 @@
         .list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border-color); }
         .list-item img { width: 40px; height: 40px; border-radius: 8px; margin-right: 10px; }
         .list-info { flex: 1; }
-        .list-actions button { background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .list-actions button { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        
+        #login-section { max-width: 400px; margin: 80px auto; background: var(--card-bg); padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--border-color); }
+        #login-section h2 { margin-bottom: 20px; color: var(--primary); }
+        .auth-error { color: #e74c3c; font-size: 14px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -25,12 +29,32 @@
             <a href="index.html" class="logo">AN1<span>.Admin</span></a>
             <div class="nav-links">
                 <a href="index.html">View Site</a>
+                <button id="logout-btn" style="display:none; background:transparent; border:none; color:var(--text-main); font-weight:bold; cursor:pointer;">Logout</button>
             </div>
             <button id="theme-toggle" class="theme-toggle">🌙</button>
         </div>
     </header>
 
-    <div class="container admin-wrap">
+    <!-- Authentication Section -->
+    <div class="container" id="login-section">
+        <h2>Secure Login</h2>
+        <div id="auth-error" class="auth-error"></div>
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="email" id="auth-email" placeholder="Admin Email" required style="width:100%; padding:12px; border:1px solid var(--border-color); border-radius:8px;">
+            </div>
+            <div class="form-group">
+                <input type="password" id="auth-password" placeholder="Password" required style="width:100%; padding:12px; border:1px solid var(--border-color); border-radius:8px;">
+            </div>
+            <button type="submit" class="download-btn" style="width:100%; max-width:none; padding:12px;">Login</button>
+        </form>
+        <p style="margin-top:20px; font-size:12px; color:var(--text-muted);">
+            Don't have an account? Create one in your Firebase Console -> Authentication.
+        </p>
+    </div>
+
+    <!-- Secure Dashboard Section -->
+    <div class="container admin-wrap" id="admin-section" style="display:none;">
         <!-- Add App Form -->
         <div class="admin-form-col">
             <div class="admin-form" style="margin:0;">
@@ -106,39 +130,78 @@
     </div>
 
     <script type="module">
-        import { db, storage, ref, push, set, get, onValue, storageRef, uploadBytes, getDownloadURL } from './assets/js/firebase-config.js';
+        import { db, storage, auth, ref, push, set, get, onValue, storageRef, uploadBytes, getDownloadURL, signInWithEmailAndPassword, signOut, onAuthStateChanged } from './assets/js/firebase-config.js';
         import { remove } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
         
-        // Load Apps List
-        const appsListDiv = document.getElementById('admin-apps-list');
-        onValue(ref(db, 'apps'), (snapshot) => {
-            appsListDiv.innerHTML = '';
-            if(snapshot.exists()) {
-                const data = snapshot.val();
-                let apps = Object.keys(data).map(k => ({id: k, ...data[k]}));
-                apps.sort((a,b) => b.timestamp - a.timestamp);
-                
-                apps.forEach(app => {
-                    const item = document.createElement('div');
-                    item.className = 'list-item';
-                    item.innerHTML = `
-                        <div style="display:flex; align-items:center; flex:1;">
-                            <img src="${app.image_url || 'https://via.placeholder.com/40'}" alt="">
-                            <div class="list-info">
-                                <div style="font-weight:bold; color:var(--text-main);">${app.title}</div>
-                                <div style="font-size:12px; color:var(--text-muted);">${app.category} | ${app.is_mod ? 'MOD' : 'Orig'}</div>
-                            </div>
-                        </div>
-                        <div class="list-actions">
-                            <button onclick="deleteApp('${app.id}')">Delete</button>
-                        </div>
-                    `;
-                    appsListDiv.appendChild(item);
-                });
+        const loginSection = document.getElementById('login-section');
+        const adminSection = document.getElementById('admin-section');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        // Auth State Observer
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginSection.style.display = 'none';
+                adminSection.style.display = 'flex';
+                logoutBtn.style.display = 'inline-block';
+                loadApps();
             } else {
-                appsListDiv.innerHTML = '<p>No apps published.</p>';
+                loginSection.style.display = 'block';
+                adminSection.style.display = 'none';
+                logoutBtn.style.display = 'none';
             }
         });
+
+        // Login Handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-password').value;
+            const errDiv = document.getElementById('auth-error');
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                errDiv.innerText = '';
+            } catch (error) {
+                errDiv.innerText = error.message;
+            }
+        });
+
+        // Logout Handler
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // Load Apps List
+        function loadApps() {
+            const appsListDiv = document.getElementById('admin-apps-list');
+            onValue(ref(db, 'apps'), (snapshot) => {
+                appsListDiv.innerHTML = '';
+                if(snapshot.exists()) {
+                    const data = snapshot.val();
+                    let apps = Object.keys(data).map(k => ({id: k, ...data[k]}));
+                    apps.sort((a,b) => b.timestamp - a.timestamp);
+                    
+                    apps.forEach(app => {
+                        const item = document.createElement('div');
+                        item.className = 'list-item';
+                        item.innerHTML = `
+                            <div style="display:flex; align-items:center; flex:1;">
+                                <img src="${app.image_url || 'https://via.placeholder.com/40'}" alt="">
+                                <div class="list-info">
+                                    <div style="font-weight:bold; color:var(--text-main);">${app.title}</div>
+                                    <div style="font-size:12px; color:var(--text-muted);">${app.category} | ${app.is_mod ? 'MOD' : 'Orig'}</div>
+                                </div>
+                            </div>
+                            <div class="list-actions">
+                                <button onclick="deleteApp('${app.id}')">Delete</button>
+                            </div>
+                        `;
+                        appsListDiv.appendChild(item);
+                    });
+                } else {
+                    appsListDiv.innerHTML = '<p>No apps published.</p>';
+                }
+            });
+        }
 
         // Global Delete Function
         window.deleteApp = async function(id) {
@@ -147,7 +210,7 @@
                     await remove(ref(db, 'apps/' + id));
                     alert('Deleted successfully.');
                 } catch(e) {
-                    alert('Error deleting: ' + e.message);
+                    alert('Permission Denied: You must be logged in as an Admin.');
                 }
             }
         }
@@ -192,7 +255,7 @@
                 document.getElementById('uploadForm').reset();
             } catch (err) {
                 console.error(err);
-                status.innerText = "Error: " + err.message;
+                status.innerText = "Error: Permission Denied. You are not authenticated.";
                 status.style.color = "red";
             } finally {
                 btn.disabled = false;
