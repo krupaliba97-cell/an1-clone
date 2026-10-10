@@ -83,3 +83,35 @@ header { background: var(--card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.05); pa
     .search-bar { width: 100%; max-width: 150px; }
     .app-header { flex-direction: column; align-items: center; text-align: center; }
 }
+
+/* Responsive Mobile & Footer Additions */
+body { overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+img { max-width: 100%; height: auto; }
+.mobile-toggle { display: none; font-size: 24px; cursor: pointer; color: var(--text-main); }
+.desktop-search { display: flex; }
+.mobile-search { display: none; margin-top: 20px; }
+
+footer { background: var(--card-bg); margin-top: auto; padding: 40px 0 20px; border-top: 1px solid var(--border-color); }
+.footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px; }
+.footer-col h3 { color: var(--primary); margin-bottom: 15px; font-size: 18px; }
+.footer-col p { color: var(--text-muted); line-height: 1.5; margin-bottom: 10px; }
+.footer-col a { display: block; color: var(--text-muted); margin-bottom: 8px; text-decoration: none; transition: color 0.3s; }
+.footer-col a:hover { color: var(--primary); }
+.contact-links a { display: inline-block; }
+.copyright { text-align: center; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 20px; font-size: 14px; }
+
+.empty-state { text-align: center; color: var(--text-muted); padding: 40px; grid-column: 1/-1; background: var(--card-bg); border-radius: 10px; }
+.error-state { text-align: center; color: red; padding: 40px; grid-column: 1/-1; background: var(--card-bg); border-radius: 10px; }
+
+.mod-badge-inline { background: var(--badge-mod); color: #fff; font-size: 12px; padding: 3px 6px; border-radius: 4px; vertical-align: middle; }
+
+@media (max-width: 768px) {
+    .mobile-toggle { display: block; }
+    .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg); flex-direction: column; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .nav-links.active { display: flex; }
+    .desktop-search { display: none; }
+    .mobile-search { display: flex; width: 100%; }
+    .mobile-search input { width: 100%; }
+    .theme-toggle { margin-left: 0; }
+    .header-actions { display: flex; align-items: center; }
+}
