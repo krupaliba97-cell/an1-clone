@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - Upload App</title>
+    <style>
+        * { box-sizing: border-box; font-family: sans-serif; }
+        body { background: #f4f6f9; padding: 20px; }
+        .container { max-width: 600px; background: #fff; padding: 30px; margin: 0 auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], select, textarea, input[type="file"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .btn { width: 100%; padding: 12px; background: #54b247; color: #fff; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .btn:disabled { background: #999; }
+        #status { margin-top: 15px; font-weight: bold; text-align: center; color: #54b247; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="text-align:center; margin-bottom: 20px; color: #54b247;">Upload New App</h2>
+        <a href="index.html" style="display:block;text-align:center;margin-bottom:20px;color:#777;">&larr; Back to Home</a>
+        
+        <form id="uploadForm">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="title" required>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="category">
+                    <option value="games">Games</option>
+                    <option value="programs">Programs</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Developer</label>
+                <input type="text" id="developer" required>
+            </div>
+            <div class="form-group">
+                <label>Version</label>
+                <input type="text" id="version">
+            </div>
+            <div class="form-group">
+                <label>Size</label>
+                <input type="text" id="size">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="description" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Is MOD?</label>
+                <input type="checkbox" id="is_mod"> Yes
+            </div>
+            <div class="form-group">
+                <label>App Icon</label>
+                <input type="file" id="image" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>Download Link</label>
+                <input type="text" id="download_url" required>
+            </div>
+            <button type="submit" class="btn" id="submitBtn">Upload to Firebase</button>
+            <div id="status"></div>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfGhQ4RgnygWO2HX8YMQYtOVSpcHKBsUc",
+            authDomain: "apkqube-aa855.firebaseapp.com",
+            databaseURL: "https://apkqube-aa855-default-rtdb.firebaseio.com",
+            projectId: "apkqube-aa855",
+            storageBucket: "apkqube-aa855.firebasestorage.app",
+            messagingSenderId: "215129305035",
+            appId: "1:215129305035:web:fdfb8fe88486c778d3504e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const storage = getStorage(app);
+
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const status = document.getElementById('status');
+            btn.disabled = true;
+            status.innerText = "Uploading Image...";
+
+            try {
+                // 1. Upload Image
+                const file = document.getElementById('image').files[0];
+                const sRef = storageRef(storage, 'icons/' + Date.now() + '_' + file.name);
+                await uploadBytes(sRef, file);
+                const imageUrl = await getDownloadURL(sRef);
+
+                status.innerText = "Saving to Database...";
+
+                // 2. Save to Realtime Database
+                const appData = {
+                    title: document.getElementById('title').value,
+                    category: document.getElementById('category').value,
+                    developer: document.getElementById('developer').value,
+                    version: document.getElementById('version').value,
+                    size: document.getElementById('size').value,
+                    description: document.getElementById('description').value,
+                    is_mod: document.getElementById('is_mod').checked,
+                    download_url: document.getElementById('download_url').value,
+                    image_url: imageUrl,
+                    timestamp: Date.now()
+                };
+
+                const newAppRef = push(ref(db, 'apps'));
+                await set(newAppRef, appData);
+
+                status.innerText = "Successfully Uploaded!";
+                document.getElementById('uploadForm').reset();
+            } catch (err) {
+                console.error(err);
+                status.innerText = "Error: " + err.message;
+                status.style.color = "red";
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
