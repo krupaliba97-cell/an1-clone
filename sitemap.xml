@@ -11,8 +11,18 @@
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://krupaliba97-cell.github.io/an1-clone/search.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
+        <loc>https://krupaliba97-cell.github.io/an1-clone/privacy.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    <url>
+        <loc>https://krupaliba97-cell.github.io/an1-clone/terms.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    <url>
+        <loc>https://krupaliba97-cell.github.io/an1-clone/dmca.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
     </url>
 </urlset>
