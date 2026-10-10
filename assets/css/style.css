@@ -107,7 +107,7 @@ footer { background: var(--card-bg); margin-top: auto; padding: 40px 0 20px; bor
 
 @media (max-width: 768px) {
     .mobile-toggle { display: block; }
-    .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg); flex-direction: column; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg); flex-direction: column; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 1000; }
     .nav-links.active { display: flex; }
     .desktop-search { display: none; }
     .mobile-search { display: flex; width: 100%; }
