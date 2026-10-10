@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AN1 Clone - Download Modded Apps & Games{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="{{ url_for('index') }}"><h2>AN1<span class="highlight">.Clone</span></h2></a>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('category', slug='games') }}">Games</a></li>
+                    <li><a href="{{ url_for('category', slug='programs') }}">Programs</a></li>
+                    <li><a href="{{ url_for('category', slug='news') }}">News</a></li>
+                    <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 AN1 Clone. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">DMCA Policy</a> | 
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div style="margin-top:10px;">
+                <a href="{{ url_for('login') }}" style="font-size:12px; color:#aaa;">Admin Login</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
