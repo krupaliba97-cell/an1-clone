@@ -1,0 +1,85 @@
+:root {
+    --primary: #54b247;
+    --primary-dark: #3f8f34;
+    --bg-color: #f4f6f9;
+    --card-bg: #ffffff;
+    --text-main: #333333;
+    --text-muted: #888888;
+    --border-color: #eeeeee;
+    --badge-mod: #ff9800;
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a2e;
+    --card-bg: #16213e;
+    --text-main: #e94560; /* Wait, let's use a standard dark theme text */
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --border-color: #2a2a4a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background: var(--bg-color); color: var(--text-main); transition: background 0.3s, color 0.3s; }
+a { text-decoration: none; color: inherit; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+
+/* Header */
+header { background: var(--card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 15px 0; position: sticky; top: 0; z-index: 100; transition: background 0.3s; }
+.header-wrap { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 24px; font-weight: 900; color: var(--text-main); }
+.logo span { color: var(--primary); }
+
+.nav-links { display: flex; gap: 20px; align-items: center; }
+.nav-links a { font-weight: 600; color: var(--text-main); transition: color 0.2s; }
+.nav-links a:hover { color: var(--primary); }
+
+.search-bar { display: flex; background: var(--bg-color); border-radius: 20px; overflow: hidden; padding: 5px 15px; align-items: center; }
+.search-bar input { border: none; background: transparent; outline: none; padding: 5px; color: var(--text-main); width: 200px; }
+.search-bar button { background: none; border: none; cursor: pointer; color: var(--text-muted); }
+
+.theme-toggle { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-main); margin-left: 15px; }
+
+/* Grids & Cards */
+.section-title { font-size: 20px; font-weight: 700; margin: 30px 0 20px; border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 5px; text-transform: uppercase; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+.card { background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: transform 0.2s, box-shadow 0.2s; position: relative; cursor: pointer; border: 1px solid var(--border-color); }
+.card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.08); }
+.card-img-wrap { position: relative; width: 100%; height: 160px; }
+.card-img { width: 100%; height: 100%; object-fit: cover; }
+.badge { position: absolute; top: 10px; left: 10px; background: var(--badge-mod); color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 6px; font-weight: bold; text-transform: uppercase; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+.card-content { padding: 12px; }
+.card-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-dev { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+.card-meta { display: flex; justify-content: space-between; font-size: 11px; font-weight: bold; color: var(--primary); }
+
+/* Single App Page */
+.app-header { background: var(--card-bg); border-radius: 15px; padding: 25px; margin-top: 30px; display: flex; gap: 25px; align-items: flex-start; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid var(--border-color); flex-wrap: wrap;}
+.app-icon { width: 140px; height: 140px; border-radius: 25px; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.app-info h1 { font-size: 28px; margin-bottom: 5px; }
+.app-info .dev { color: var(--primary); font-weight: 600; margin-bottom: 15px; display: block;}
+.app-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 13px; color: var(--text-muted); background: var(--bg-color); padding: 15px; border-radius: 10px;}
+.app-specs div strong { color: var(--text-main); display: block; margin-bottom: 3px; }
+
+.download-btn { display: inline-block; background: var(--primary); color: #fff; padding: 15px 30px; border-radius: 10px; font-size: 18px; font-weight: bold; margin-top: 20px; transition: background 0.3s; text-align: center; width: 100%; max-width: 300px; box-shadow: 0 4px 15px rgba(84, 178, 71, 0.3); }
+.download-btn:hover { background: var(--primary-dark); color: #fff; }
+
+.app-content { background: var(--card-bg); border-radius: 15px; padding: 25px; margin-top: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid var(--border-color); line-height: 1.6; }
+.app-content h3 { margin: 20px 0 10px; font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+
+/* Admin Form */
+.admin-form { background: var(--card-bg); padding: 30px; border-radius: 15px; max-width: 800px; margin: 30px auto; border: 1px solid var(--border-color); }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+.form-group input[type="text"], .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-main); outline: none; }
+.form-group input[type="text"]:focus, .form-group textarea:focus { border-color: var(--primary); }
+.form-row { display: flex; gap: 15px; }
+.form-row .form-group { flex: 1; }
+
+.loader { border: 4px solid var(--bg-color); border-top: 4px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+@media (max-width: 768px) {
+    .nav-links { display: none; } /* Add mobile menu later if needed */
+    .search-bar { width: 100%; max-width: 150px; }
+    .app-header { flex-direction: column; align-items: center; text-align: center; }
+}
