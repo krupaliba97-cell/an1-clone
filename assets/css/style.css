@@ -115,3 +115,6 @@ footer { background: var(--card-bg); margin-top: auto; padding: 40px 0 20px; bor
     .theme-toggle { margin-left: 0; }
     .header-actions { display: flex; align-items: center; }
 }
+
+/* Accessibility */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
