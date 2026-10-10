@@ -7,6 +7,8 @@
     <link rel="canonical" href="https://krupaliba97-cell.github.io/an1-clone/app.html">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="icon" href="https://via.placeholder.com/32/54b247/ffffff?text=A" type="image/png">
     <link rel="stylesheet" href="assets/css/style.css">
 
@@ -45,9 +47,10 @@
     </main>
     <script type="module">
         import { db, ref, get } from './assets/js/firebase-config.js';
-        window.startDownloadTimer = function(url) {
+        window.startDownloadTimer = function(rawUrl) {
             const btn = document.getElementById('download-btn');
-            if(!url || url === 'undefined' || url === 'null' || url.trim() === '') { 
+            const safeLink = sanitizeUrl(rawUrl, '');
+            if(!safeLink) { 
                 btn.innerHTML = 'Link Unavailable';
                 btn.style.background = '#ef4444';
                 btn.style.pointerEvents = 'none';
@@ -64,7 +67,7 @@
                     btn.innerHTML = 'Click here to Download';
                     btn.style.background = "var(--primary)";
                     btn.style.pointerEvents = "auto";
-                    btn.onclick = () => { window.open(url, '_blank'); };
+                    btn.onclick = () => { window.open(safeLink, '_blank', 'noopener,noreferrer'); };
                 } else {
                     btn.innerHTML = 'Please wait ' + timeLeft + 's...';
                 }
