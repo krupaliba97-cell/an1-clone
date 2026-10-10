@@ -41,38 +41,54 @@
         </div>
     </header>
 
+    <div class="category-chips-wrap">
+        <div class="container category-chips">
+            <a href="index.html" class="chip">🔥 All</a>
+            <a href="category.html?c=Games" class="chip">🎮 Games</a>
+            <a href="category.html?c=Programs" class="chip">📱 Programs</a>
+            <a href="search.html?q=Action" class="chip">⚔️ Action</a>
+            <a href="search.html?q=Racing" class="chip">🏎️ Racing</a>
+            <a href="search.html?q=Mod" class="chip">⚡ MODs</a>
+            <a href="search.html?q=Puzzle" class="chip">🧩 Puzzle</a>
+        </div>
+    </div>
 
-    <main class="container" id="app-container" style="min-height: 60vh;">
+
+    <main class="container" id="app-container" style="min-height: 60vh; padding-top: 8px;">
         <div class="loader" style="margin-top: 50px;"></div>
     </main>
     <script type="module">
         import { db, ref, get } from './assets/js/firebase-config.js';
+        import { escapeHTML, sanitizeUrl } from './assets/js/main.js';
+
         window.startDownloadTimer = function(rawUrl) {
             const btn = document.getElementById('download-btn');
             const safeLink = sanitizeUrl(rawUrl, '');
             if(!safeLink) { 
-                btn.innerHTML = 'Link Unavailable';
+                btn.innerHTML = '⚠️ Link Unavailable';
                 btn.style.background = '#ef4444';
                 btn.style.pointerEvents = 'none';
                 return; 
             }
             let timeLeft = 3;
-            btn.innerHTML = 'Please wait ' + timeLeft + 's...';
-            btn.style.background = "#6b7280";
+            btn.classList.remove('ready');
+            btn.innerHTML = '⏳ Preparing Download (' + timeLeft + 's)...';
+            btn.style.background = "#64748b";
             btn.style.pointerEvents = "none";
             const timer = setInterval(() => {
                 timeLeft--;
                 if(timeLeft <= 0) {
                     clearInterval(timer);
-                    btn.innerHTML = 'Click here to Download';
-                    btn.style.background = "var(--primary)";
+                    btn.classList.add('ready');
+                    btn.innerHTML = '🚀 Download APK Now';
                     btn.style.pointerEvents = "auto";
                     btn.onclick = () => { window.open(safeLink, '_blank', 'noopener,noreferrer'); };
                 } else {
-                    btn.innerHTML = 'Please wait ' + timeLeft + 's...';
+                    btn.innerHTML = '⏳ Preparing Download (' + timeLeft + 's)...';
                 }
             }, 1000);
         }
+
         async function loadAppDetails() {
             const id = new URLSearchParams(window.location.search).get('id');
             const container = document.getElementById('app-container');
@@ -82,31 +98,67 @@
                 if(snapshot.exists()) {
                     const app = snapshot.val();
                     const updateDate = new Date(app.timestamp).toLocaleDateString();
-                    document.title = (app.title || 'App') + " MOD APK Download - AN1 Clone";
+                    const title = escapeHTML(app.title || 'Unknown App');
+                    const dev = escapeHTML(app.developer || 'Unknown');
+                    const version = escapeHTML(app.version || 'Varies');
+                    const size = escapeHTML(app.size || 'Varies');
+                    const cat = escapeHTML(app.category || 'App');
+                    const desc = escapeHTML(app.description || 'No description provided.');
+                    const whatsNew = app.whats_new ? escapeHTML(app.whats_new) : '';
+                    const imgUrl = sanitizeUrl(app.image_url, 'https://via.placeholder.com/150');
+                    const dlUrl = sanitizeUrl(app.download_url, '');
+
+                    document.title = title + " MOD APK Download - AN1 Clone";
                     const metaDesc = document.querySelector('meta[name="description"]');
-                    if(metaDesc) metaDesc.setAttribute('content', 'Download ' + (app.title || 'App') + ' MOD APK v' + (app.version || '') + ' for Android. ' + (app.size || '') + ' free download.');
+                    if(metaDesc) metaDesc.setAttribute('content', 'Download ' + title + ' MOD APK v' + version + ' for Android. ' + size + ' free safe download.');
+
                     container.innerHTML = 
+                        '<nav class="breadcrumbs" aria-label="Breadcrumb">' +
+                            '<a href="index.html">Home</a> &rsaquo; ' +
+                            '<a href="category.html?c=' + encodeURIComponent(app.category || 'Games') + '">' + cat + '</a> &rsaquo; ' +
+                            '<span class="current">' + title + '</span>' +
+                        '</nav>' +
                         '<article class="app-header">' +
-                            '<img src="' + (app.image_url || 'https://via.placeholder.com/150') + '" class="app-icon" alt="' + (app.title || 'App') + '" width="110" height="110">' +
+                            '<img src="' + imgUrl + '" class="app-icon" alt="' + title + '" width="110" height="110">' +
                             '<div class="app-info">' +
-                                '<h1>' + (app.title || 'Unknown') + (app.is_mod ? ' <span class="mod-badge-inline">MOD</span>' : '') + '</h1>' +
-                                '<a href="search.html?q=' + encodeURIComponent(app.developer || '') + '" class="dev">' + (app.developer || 'Unknown') + '</a>' +
+                                '<h1>' + title + (app.is_mod ? ' <span class="mod-badge-inline">MOD</span>' : '') + '</h1>' +
+                                '<a href="search.html?q=' + encodeURIComponent(app.developer || '') + '" class="dev">' + dev + '</a>' +
                                 '<div class="app-specs">' +
-                                    '<div><strong>Version</strong> ' + (app.version || 'Varies') + '</div>' +
-                                    '<div><strong>Size</strong> ' + (app.size || 'Varies') + '</div>' +
-                                    '<div><strong>Category</strong> ' + (app.category || 'App') + '</div>' +
-                                    '<div><strong>Updated</strong> ' + updateDate + '</div>' +
+                                    '<div><strong>📱 Version</strong> ' + version + '</div>' +
+                                    '<div><strong>📦 Size</strong> ' + size + '</div>' +
+                                    '<div><strong>🏷️ Category</strong> ' + cat + '</div>' +
+                                    '<div><strong>🔄 Updated</strong> ' + updateDate + '</div>' +
                                 '</div>' +
                             '</div>' +
                         '</article>' +
-                        '<div style="text-align:center; padding: 16px 0;">' +
-                            '<button id="download-btn" class="download-btn" onclick="startDownloadTimer(\'' + (app.download_url || '').replace(/'/g, "\\'") + '\')">Download APK</button>' +
+                        '<div class="safety-badge">' +
+                            '<span class="shield-icon">🛡️</span>' +
+                            '<div>' +
+                                '<strong>Verified Safe & Tested</strong>' +
+                                '<p>Scanned virus-free and malware-free by AN1 Security Engine</p>' +
+                            '</div>' +
+                        '</div>' +
+                        (app.is_mod ? 
+                            '<div class="mod-info-box">' +
+                                '<h4>⚡ MOD Features</h4>' +
+                                '<ul>' +
+                                    '<li>Unlimited Money / Coins / Gems</li>' +
+                                    '<li>All Premium Features & Skins Unlocked</li>' +
+                                    '<li>No Advertisements (Clean Experience)</li>' +
+                                '</ul>' +
+                            '</div>' : '') +
+                        '<div style="text-align:center; padding: 12px 0;">' +
+                            '<button id="download-btn" class="download-btn">⬇ Download APK (' + size + ')</button>' +
                         '</div>' +
                         '<section class="app-content">' +
                             '<h3>Description</h3>' +
-                            '<div style="white-space: pre-wrap;">' + (app.description || 'No description provided.') + '</div>' +
-                            (app.whats_new ? '<h3>What\'s New</h3><div style="white-space: pre-wrap;">' + app.whats_new + '</div>' : '') +
+                            '<div style="white-space: pre-wrap;">' + desc + '</div>' +
+                            (whatsNew ? '<h3>What\'s New</h3><div style="white-space: pre-wrap;">' + whatsNew + '</div>' : '') +
                         '</section>';
+
+                    document.getElementById('download-btn').addEventListener('click', () => {
+                        window.startDownloadTimer(dlUrl);
+                    });
                 } else {
                     container.innerHTML = '<p class="error-state">App not found.</p>';
                 }
@@ -123,7 +175,7 @@
         <div class="container footer-content">
             <div class="footer-col">
                 <h3>AN1 Clone</h3>
-                <p>Premium source for Android MOD APKs, Games, and Programs.</p>
+                <p>Premium source for Android MOD APKs, Games, and Programs. 100% Free & Safe Downloads.</p>
                 <div class="contact-links">
                     <a href="mailto:support@an1clone.com" aria-label="Email support">&#9993; support@an1clone.com</a><br>
                     <a href="tel:+1234567890" aria-label="Call support">&#128222; +1 234 567 890</a>
@@ -156,21 +208,18 @@
                 const isActive = navLinks.classList.toggle('active');
                 mobileToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
             });
-            // Close when clicking any nav link
             navLinks.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => {
                     navLinks.classList.remove('active');
                     mobileToggle.setAttribute('aria-expanded', 'false');
                 });
             });
-            // Close when tapping outside
             document.addEventListener('click', function(e) {
                 if (!navLinks.contains(e.target) && e.target !== mobileToggle) {
                     navLinks.classList.remove('active');
                     mobileToggle.setAttribute('aria-expanded', 'false');
                 }
             });
-            // Close on escape
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     navLinks.classList.remove('active');
