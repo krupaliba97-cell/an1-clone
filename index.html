@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home - AN1 Clone MOD APKs</title>
+    <title>AN1 Clone - Download Premium MOD APKs & Games for Android</title>
+    <meta name="description" content="Download the latest MOD APKs, premium games, and programs for Android. 100% safe, fast, and free.">
     <link rel="canonical" href="https://krupaliba97-cell.github.io/an1-clone/index.html">
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Download Premium MOD APKs, Games, and Programs for Android. 100% safe, fast, and free.">
     <link rel="icon" href="https://via.placeholder.com/32/54b247/ffffff?text=A" type="image/png">
     <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 <body>
-    
+
     <header>
         <div class="container header-wrap">
             <a href="index.html" class="logo">AN1<span>.Clone</span></a>
-            <div class="mobile-toggle" id="mobile-toggle">☰</div>
+            <div class="mobile-toggle" id="mobile-toggle">&#9776;</div>
             
             <div class="nav-links" id="nav-links">
                 <a href="index.html">Home</a>
@@ -25,21 +25,21 @@
                 
                 <form action="search.html" method="GET" class="search-bar mobile-search">
                     <input type="text" name="q" placeholder="Search..." required>
-                    <button type="submit">🔍</button>
+                    <button type="submit">&#128269;</button>
                 </form>
             </div>
 
             <div class="header-actions">
                 <form action="search.html" method="GET" class="search-bar desktop-search">
                     <input type="text" name="q" placeholder="Search..." required>
-                    <button type="submit">🔍</button>
+                    <button type="submit">&#128269;</button>
                 </form>
-                <button id="theme-toggle" class="theme-toggle">🌙</button>
+                <button id="theme-toggle" class="theme-toggle">&#127769;</button>
             </div>
         </div>
     </header>
 
-    
+
     <div class="container" style="margin-top: 30px; min-height: 60vh;">
         <h2 class="section-title">Latest Updates</h2>
         <div class="grid" id="latest-grid">
@@ -68,15 +68,15 @@
         loadLatestApps();
     </script>
         
-    
+
     <footer>
         <div class="container footer-content">
             <div class="footer-col">
                 <h3>AN1 Clone</h3>
                 <p>Premium source for Android MOD APKs.</p>
                 <div class="contact-links">
-                    <a href="mailto:support@an1clone.com">✉️ support@an1clone.com</a><br>
-                    <a href="tel:+1234567890">📞 +1 234 567 890</a>
+                    <a href="mailto:support@an1clone.com">&#9993; support@an1clone.com</a><br>
+                    <a href="tel:+1234567890">&#128222; +1 234 567 890</a>
                 </div>
             </div>
             <div class="footer-col">
@@ -87,9 +87,9 @@
             </div>
             <div class="footer-col">
                 <h3>Legal</h3>
-                <a href="404.html">Privacy Policy</a>
-                <a href="404.html">Terms of Service</a>
-                <a href="404.html">DMCA</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="dmca.html">DMCA</a>
             </div>
         </div>
         <div class="copyright">
@@ -103,6 +103,21 @@
         });
     </script>
 
-    <script src="assets/js/main.js" type="module"></script>
+
+    <script type="module">
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if(themeToggle) {
+            themeToggle.innerHTML = currentTheme === 'dark' ? '&#9728;' : '&#127769;';
+            themeToggle.addEventListener('click', () => {
+                const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeToggle.innerHTML = newTheme === 'dark' ? '&#9728;' : '&#127769;';
+            });
+        }
+    </script>
+
 </body>
 </html>
