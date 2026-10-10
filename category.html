@@ -41,6 +41,18 @@
         </div>
     </header>
 
+    <div class="category-chips-wrap">
+        <div class="container category-chips">
+            <a href="index.html" class="chip">🔥 All</a>
+            <a href="category.html?c=Games" class="chip">🎮 Games</a>
+            <a href="category.html?c=Programs" class="chip">📱 Programs</a>
+            <a href="search.html?q=Action" class="chip">⚔️ Action</a>
+            <a href="search.html?q=Racing" class="chip">🏎️ Racing</a>
+            <a href="search.html?q=Mod" class="chip">⚡ MODs</a>
+            <a href="search.html?q=Puzzle" class="chip">🧩 Puzzle</a>
+        </div>
+    </div>
+
 
     <main class="container" style="margin-top: 24px; min-height: 60vh;">
         <h2 class="section-title" id="cat-title">Loading...</h2>
@@ -78,7 +90,7 @@
         <div class="container footer-content">
             <div class="footer-col">
                 <h3>AN1 Clone</h3>
-                <p>Premium source for Android MOD APKs, Games, and Programs.</p>
+                <p>Premium source for Android MOD APKs, Games, and Programs. 100% Free & Safe Downloads.</p>
                 <div class="contact-links">
                     <a href="mailto:support@an1clone.com" aria-label="Email support">&#9993; support@an1clone.com</a><br>
                     <a href="tel:+1234567890" aria-label="Call support">&#128222; +1 234 567 890</a>
@@ -111,21 +123,18 @@
                 const isActive = navLinks.classList.toggle('active');
                 mobileToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
             });
-            // Close when clicking any nav link
             navLinks.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => {
                     navLinks.classList.remove('active');
                     mobileToggle.setAttribute('aria-expanded', 'false');
                 });
             });
-            // Close when tapping outside
             document.addEventListener('click', function(e) {
                 if (!navLinks.contains(e.target) && e.target !== mobileToggle) {
                     navLinks.classList.remove('active');
                     mobileToggle.setAttribute('aria-expanded', 'false');
                 }
             });
-            // Close on escape
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     navLinks.classList.remove('active');
