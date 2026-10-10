@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body style="padding: 20px;">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2>Admin Dashboard</h2>
+            <div>
+                <a href="{{ url_for('index') }}" class="btn btn-dark" target="_blank">View Site</a>
+                <a href="{{ url_for('admin_add') }}" class="btn btn-green">+ Add New App/Game</a>
+                <a href="{{ url_for('logout') }}" class="btn" style="background:#e53935;color:#fff;">Logout</a>
+            </div>
+        </div>
+        
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div style="background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 5px; margin-bottom: 15px;">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <table style="width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+            <tr style="background: var(--primary-color); color: #fff; text-align: left;">
+                <th style="padding: 15px;">Title</th>
+                <th style="padding: 15px;">Category</th>
+                <th style="padding: 15px;">MOD</th>
+                <th style="padding: 15px;">Actions</th>
+            </tr>
+            {% for app in apps %}
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 15px;">{{ app.title }}</td>
+                <td style="padding: 15px;">{{ app.category.name }}</td>
+                <td style="padding: 15px;">{{ 'Yes' if app.is_mod else 'No' }}</td>
+                <td style="padding: 15px;">
+                    <a href="{{ url_for('admin_delete', id=app.id) }}" style="color: red;" onclick="return confirm('Delete this app?')">Delete</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" style="padding: 15px; text-align: center;">No apps uploaded yet.</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
