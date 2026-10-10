@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="description" content="AN1 Clone Admin Dashboard - Manage Apps securely">
-    <link rel="icon" href="https://via.placeholder.com/32/54b247/ffffff?text=A" type="image/png">
-    <title>Secure Admin Dashboard - AN1 Pro Clone</title>
+    <meta name="description" content="APKQube Admin Dashboard - Manage Apps securely">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2354b247'/><path d='M50 24 C36 24 25 35 25 50 C25 65 36 76 50 76 C55.5 76 60.5 74.2 64.5 71 L72 78.5 L78.5 72 L71 64.5 C74.2 60.5 76 55.5 76 50 C76 35 65 24 50 24 Z M50 35 C58.3 35 65 41.7 65 50 C65 58.3 58.3 65 50 65 C41.7 65 35 58.3 35 50 C35 41.7 41.7 35 50 35 Z' fill='white'/></svg>">
+    <title>Secure Admin Dashboard - APKQube.com</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <header>
         <div class="container header-wrap">
-            <a href="index.html" class="logo">AN1<span>.Admin</span></a>
+            <a href="index.html" class="logo" aria-label="APKQube Admin">APK<span>Qube</span>.Admin</a>
             <div class="nav-links">
                 <a href="index.html">View Site</a>
                 <button id="logout-btn" style="display:none; background:transparent; border:none; color:var(--text-main); font-weight:bold; cursor:pointer;">Logout</button>
             </div>
-            <button id="theme-toggle" class="theme-toggle">🌙</button>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"><svg class="icon icon-theme" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></button>
         </div>
     </header>
 
@@ -261,15 +261,17 @@
     </script>
     <script type="module">
         const themeToggle = document.getElementById('theme-toggle');
+        const sunSvg = `<svg class="icon icon-theme" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+        const moonSvg = `<svg class="icon icon-theme" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
         const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', currentTheme);
         if(themeToggle) {
-            themeToggle.innerHTML = currentTheme === 'dark' ? '☀️' : '🌙';
+            themeToggle.innerHTML = currentTheme === 'dark' ? sunSvg : moonSvg;
             themeToggle.addEventListener('click', () => {
                 const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
                 document.documentElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
-                themeToggle.innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
+                themeToggle.innerHTML = newTheme === 'dark' ? sunSvg : moonSvg;
             });
         }
     </script>
