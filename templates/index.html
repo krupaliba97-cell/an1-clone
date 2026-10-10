@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <h1>Games & Apps Catalog</h1>
+        <p>Download the latest versions of popular games and programs for Android</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('category', slug='games') }}" class="btn btn-green">All Games</a>
+            <a href="{{ url_for('category', slug='programs') }}" class="btn btn-dark">Programs</a>
+        </div>
+    </div>
+</section>
+
+<section class="latest-games">
+    <h2 class="section-title">LATEST UPLOADS</h2>
+    <div class="games-grid">
+        {% for app in apps %}
+        <div class="game-card" onclick="window.location.href='{{ url_for('single_app', app_id=app.id) }}'">
+            {% if app.is_mod %}
+            <div class="game-badge">MOD</div>
+            {% endif %}
+            {% if app.image %}
+            <img src="{{ url_for('static', filename='uploads/' + app.image) }}" alt="{{ app.title }}" class="game-img">
+            {% else %}
+            <div class="game-img" style="background:#eee;display:flex;align-items:center;justify-content:center;color:#999;">No Image</div>
+            {% endif %}
+            <div class="game-info">
+                <div class="game-title">{{ app.title }}</div>
+                <div class="game-dev">{{ app.developer }}</div>
+            </div>
+        </div>
+        {% else %}
+        <p>No apps uploaded yet. Login to Admin Panel to upload.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
