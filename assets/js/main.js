@@ -21,7 +21,10 @@ export function sanitizeUrl(url, fallback = 'https://via.placeholder.com/300') {
     return fallback;
 }
 
-// Generate App Card HTML with AN1-Style Squircle Icon Layout
+// SVG Star Icon Vector
+const SVG_STAR = `<svg class="icon-star" viewBox="0 0 24 24" width="13" height="13" fill="#f59e0b" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+
+// Generate App Card HTML with APKQube Squircle Icon Layout
 export function createAppCard(app) {
     const rawId = encodeURIComponent(app.id || '');
     const title = escapeHTML(app.title || 'Unknown App');
@@ -39,7 +42,7 @@ export function createAppCard(app) {
             <div class="card-content">
                 <div class="card-title">${title}</div>
                 <div class="card-dev">${developer}</div>
-                <div class="card-rating">★ 4.8</div>
+                <div class="card-rating">${SVG_STAR} 4.8</div>
                 <div class="card-meta">
                     <span class="meta-tag">${size}</span>
                     <span class="meta-cat">${category}</span>
