@@ -2,23 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Details - AN1 Clone</title>
+    <title>Download App - AN1 Clone</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Download Premium MOD APKs, Games, and Programs for Android. 100% safe, fast, and free.">
+    <link rel="icon" href="https://via.placeholder.com/32/54b247/ffffff?text=A" type="image/png">
     <link rel="stylesheet" href="assets/css/style.css">
+
 </head>
 <body>
+    
     <header>
         <div class="container header-wrap">
             <a href="index.html" class="logo">AN1<span>.Clone</span></a>
-            <div class="nav-links">
+            <div class="mobile-toggle" id="mobile-toggle">☰</div>
+            
+            <div class="nav-links" id="nav-links">
                 <a href="index.html">Home</a>
                 <a href="category.html?c=Games">Games</a>
                 <a href="category.html?c=Programs">Programs</a>
-                <a href="admin.html" style="font-size: 12px; color: var(--text-muted);">Admin</a>
+                <a href="admin.html" class="admin-link">Admin Panel</a>
+                
+                <form action="search.html" method="GET" class="search-bar mobile-search">
+                    <input type="text" name="q" placeholder="Search..." required>
+                    <button type="submit">🔍</button>
+                </form>
             </div>
-            <div style="display:flex; align-items:center;">
-                <form action="search.html" method="GET" class="search-bar">
-                    <input type="text" name="q" placeholder="Search games & apps..." required>
+
+            <div class="header-actions">
+                <form action="search.html" method="GET" class="search-bar desktop-search">
+                    <input type="text" name="q" placeholder="Search..." required>
                     <button type="submit">🔍</button>
                 </form>
                 <button id="theme-toggle" class="theme-toggle">🌙</button>
@@ -26,26 +39,24 @@
         </div>
     </header>
 
-    <div class="container" id="app-container">
+    
+    <div class="container" id="app-container" style="min-height: 60vh;">
         <div class="loader" style="margin-top: 50px;"></div>
     </div>
-
     <script type="module">
         import { db, ref, get } from './assets/js/firebase-config.js';
-
-        // Timer Logic for Download Button
         window.startDownloadTimer = function(url) {
             const btn = document.getElementById('download-btn');
+            if(!url || url === 'undefined') { alert('No download link provided!'); return; }
             let timeLeft = 3;
             btn.innerHTML = `Please wait ${timeLeft}s...`;
             btn.style.background = "#999";
             btn.style.pointerEvents = "none";
-            
             const timer = setInterval(() => {
                 timeLeft--;
                 if(timeLeft <= 0) {
                     clearInterval(timer);
-                    btn.innerHTML = `Click to Download`;
+                    btn.innerHTML = `Click here to Download`;
                     btn.style.background = "var(--primary)";
                     btn.style.pointerEvents = "auto";
                     btn.onclick = () => { window.location.href = url; };
@@ -54,31 +65,22 @@
                 }
             }, 1000);
         }
-
         async function loadAppDetails() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id');
+            const id = new URLSearchParams(window.location.search).get('id');
             const container = document.getElementById('app-container');
-
-            if(!id) {
-                container.innerHTML = '<p>No App ID provided.</p>';
-                return;
-            }
-
+            if(!id) return container.innerHTML = '<p class="error-state">No App ID provided.</p>';
             try {
                 const snapshot = await get(ref(db, 'apps/' + id));
                 if(snapshot.exists()) {
                     const app = snapshot.val();
-                    
                     const updateDate = new Date(app.timestamp).toLocaleDateString();
-                    
+                    document.title = app.title + " MOD APK - AN1 Clone";
                     container.innerHTML = `
                         <div class="app-header">
                             <img src="${app.image_url || 'https://via.placeholder.com/150'}" class="app-icon" alt="${app.title}">
                             <div class="app-info" style="flex:1;">
-                                <h1>${app.title} ${app.is_mod ? '<span style="color:var(--badge-mod);font-size:16px;vertical-align:middle;margin-left:10px;">[MOD]</span>' : ''}</h1>
+                                <h1>${app.title} ${app.is_mod ? '<span class="mod-badge-inline">MOD</span>' : ''}</h1>
                                 <a href="search.html?q=${app.developer}" class="dev">${app.developer}</a>
-                                
                                 <div class="app-specs">
                                     <div><strong>Version</strong> ${app.version || 'Varies'}</div>
                                     <div><strong>Size</strong> ${app.size || 'Varies'}</div>
@@ -87,29 +89,60 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div style="text-align:center;">
+                        <div style="text-align:center; padding: 20px;">
                             <button id="download-btn" class="download-btn" onclick="startDownloadTimer('${app.download_url}')">Download APK</button>
                         </div>
-
                         <div class="app-content">
                             <h3>Description</h3>
                             <div style="white-space: pre-wrap;">${app.description || 'No description provided.'}</div>
-                            
                             ${app.whats_new ? `<h3>What's New</h3><div style="white-space: pre-wrap;">${app.whats_new}</div>` : ''}
                         </div>
                     `;
                 } else {
-                    container.innerHTML = '<p style="color:red; margin-top:20px;">App not found.</p>';
+                    container.innerHTML = '<p class="error-state">App not found.</p>';
                 }
             } catch(e) {
-                console.error(e);
-                container.innerHTML = '<p style="color:red;">Error loading app data.</p>';
+                container.innerHTML = '<p class="error-state">Error loading app data.</p>';
             }
         }
-
         loadAppDetails();
     </script>
+        
+    
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h3>AN1 Clone</h3>
+                <p>Premium source for Android MOD APKs.</p>
+                <div class="contact-links">
+                    <a href="mailto:support@an1clone.com">✉️ support@an1clone.com</a><br>
+                    <a href="tel:+1234567890">📞 +1 234 567 890</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <a href="index.html">Home</a>
+                <a href="category.html?c=Games">Games</a>
+                <a href="category.html?c=Programs">Programs</a>
+            </div>
+            <div class="footer-col">
+                <h3>Legal</h3>
+                <a href="404.html">Privacy Policy</a>
+                <a href="404.html">Terms of Service</a>
+                <a href="404.html">DMCA</a>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; <span id="year"></span> AN1 Clone. All rights reserved.
+        </div>
+    </footer>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        document.getElementById('mobile-toggle').addEventListener('click', function() {
+            document.getElementById('nav-links').classList.toggle('active');
+        });
+    </script>
+
     <script src="assets/js/main.js" type="module"></script>
 </body>
 </html>
