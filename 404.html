@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404 Not Found - AN1 Clone</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Download Premium MOD APKs, Games, and Programs for Android. 100% safe, fast, and free.">
+    <link rel="icon" href="https://via.placeholder.com/32/54b247/ffffff?text=A" type="image/png">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+<body>
+    
+    <header>
+        <div class="container header-wrap">
+            <a href="index.html" class="logo">AN1<span>.Clone</span></a>
+            <div class="mobile-toggle" id="mobile-toggle">☰</div>
+            
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="category.html?c=Games">Games</a>
+                <a href="category.html?c=Programs">Programs</a>
+                <a href="admin.html" class="admin-link">Admin Panel</a>
+                
+                <form action="search.html" method="GET" class="search-bar mobile-search">
+                    <input type="text" name="q" placeholder="Search..." required>
+                    <button type="submit">🔍</button>
+                </form>
+            </div>
+
+            <div class="header-actions">
+                <form action="search.html" method="GET" class="search-bar desktop-search">
+                    <input type="text" name="q" placeholder="Search..." required>
+                    <button type="submit">🔍</button>
+                </form>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </header>
+
+    
+    <div class="container" style="text-align:center; min-height: 60vh; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+        <h1 style="font-size: 80px; color: var(--primary); margin-bottom: 20px;">404</h1>
+        <h2>Oops! Page Not Found</h2>
+        <p style="color: var(--text-muted); margin: 20px 0;">The page you are looking for might have been removed or is temporarily unavailable.</p>
+        <a href="index.html" class="download-btn" style="text-decoration:none; display:inline-block;">Go Back Home</a>
+    </div>
+        
+    
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h3>AN1 Clone</h3>
+                <p>Premium source for Android MOD APKs.</p>
+                <div class="contact-links">
+                    <a href="mailto:support@an1clone.com">✉️ support@an1clone.com</a><br>
+                    <a href="tel:+1234567890">📞 +1 234 567 890</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <a href="index.html">Home</a>
+                <a href="category.html?c=Games">Games</a>
+                <a href="category.html?c=Programs">Programs</a>
+            </div>
+            <div class="footer-col">
+                <h3>Legal</h3>
+                <a href="404.html">Privacy Policy</a>
+                <a href="404.html">Terms of Service</a>
+                <a href="404.html">DMCA</a>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; <span id="year"></span> AN1 Clone. All rights reserved.
+        </div>
+    </footer>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        document.getElementById('mobile-toggle').addEventListener('click', function() {
+            document.getElementById('nav-links').classList.toggle('active');
+        });
+    </script>
+
+    <script src="assets/js/main.js" type="module"></script>
+</body>
+</html>
