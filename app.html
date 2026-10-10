@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Download App - AN1 Clone</title>
+    <meta name="description" content="Download this MOD APK for Android. Safe and free.">
     <link rel="canonical" href="https://krupaliba97-cell.github.io/an1-clone/app.html">
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Download Premium MOD APKs, Games, and Programs for Android. 100% safe, fast, and free.">
     <link rel="icon" href="https://via.placeholder.com/32/54b247/ffffff?text=A" type="image/png">
     <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 <body>
-    
+
     <header>
         <div class="container header-wrap">
             <a href="index.html" class="logo">AN1<span>.Clone</span></a>
-            <div class="mobile-toggle" id="mobile-toggle">☰</div>
+            <div class="mobile-toggle" id="mobile-toggle">&#9776;</div>
             
             <div class="nav-links" id="nav-links">
                 <a href="index.html">Home</a>
@@ -25,21 +25,21 @@
                 
                 <form action="search.html" method="GET" class="search-bar mobile-search">
                     <input type="text" name="q" placeholder="Search..." required>
-                    <button type="submit">🔍</button>
+                    <button type="submit">&#128269;</button>
                 </form>
             </div>
 
             <div class="header-actions">
                 <form action="search.html" method="GET" class="search-bar desktop-search">
                     <input type="text" name="q" placeholder="Search..." required>
-                    <button type="submit">🔍</button>
+                    <button type="submit">&#128269;</button>
                 </form>
-                <button id="theme-toggle" class="theme-toggle">🌙</button>
+                <button id="theme-toggle" class="theme-toggle">&#127769;</button>
             </div>
         </div>
     </header>
 
-    
+
     <div class="container" id="app-container" style="min-height: 60vh;">
         <div class="loader" style="margin-top: 50px;"></div>
     </div>
@@ -47,26 +47,26 @@
         import { db, ref, get } from './assets/js/firebase-config.js';
         window.startDownloadTimer = function(url) {
             const btn = document.getElementById('download-btn');
-            if(!url || url === 'undefined' || url.trim() === '') { 
+            if(!url || url === 'undefined' || url === 'null' || url.trim() === '') { 
                 btn.innerHTML = 'Link Unavailable';
                 btn.style.background = '#e74c3c';
                 btn.style.pointerEvents = 'none';
                 return; 
             }
             let timeLeft = 3;
-            btn.innerHTML = `Please wait ${timeLeft}s...`;
+            btn.innerHTML = 'Please wait ' + timeLeft + 's...';
             btn.style.background = "#999";
             btn.style.pointerEvents = "none";
             const timer = setInterval(() => {
                 timeLeft--;
                 if(timeLeft <= 0) {
                     clearInterval(timer);
-                    btn.innerHTML = `Click here to Download`;
+                    btn.innerHTML = 'Click here to Download';
                     btn.style.background = "var(--primary)";
                     btn.style.pointerEvents = "auto";
-                    btn.onclick = () => { window.location.href = url; };
+                    btn.onclick = () => { window.open(url, '_blank'); };
                 } else {
-                    btn.innerHTML = `Please wait ${timeLeft}s...`;
+                    btn.innerHTML = 'Please wait ' + timeLeft + 's...';
                 }
             }, 1000);
         }
@@ -79,49 +79,51 @@
                 if(snapshot.exists()) {
                     const app = snapshot.val();
                     const updateDate = new Date(app.timestamp).toLocaleDateString();
-                    document.title = app.title + " MOD APK - AN1 Clone";
-                    container.innerHTML = `
-                        <div class="app-header">
-                            <img src="${app.image_url || 'https://via.placeholder.com/150'}" class="app-icon" alt="${app.title}">
-                            <div class="app-info" style="flex:1;">
-                                <h1>${app.title} ${app.is_mod ? '<span class="mod-badge-inline">MOD</span>' : ''}</h1>
-                                <a href="search.html?q=${app.developer}" class="dev">${app.developer}</a>
-                                <div class="app-specs">
-                                    <div><strong>Version</strong> ${app.version || 'Varies'}</div>
-                                    <div><strong>Size</strong> ${app.size || 'Varies'}</div>
-                                    <div><strong>Category</strong> ${app.category || 'App'}</div>
-                                    <div><strong>Updated</strong> ${updateDate}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="text-align:center; padding: 20px;">
-                            <button id="download-btn" class="download-btn" onclick="startDownloadTimer('${app.download_url}')">Download APK</button>
-                        </div>
-                        <div class="app-content">
-                            <h3>Description</h3>
-                            <div style="white-space: pre-wrap;">${app.description || 'No description provided.'}</div>
-                            ${app.whats_new ? `<h3>What's New</h3><div style="white-space: pre-wrap;">${app.whats_new}</div>` : ''}
-                        </div>
-                    `;
+                    document.title = (app.title || 'App') + " MOD APK Download - AN1 Clone";
+                    const metaDesc = document.querySelector('meta[name="description"]');
+                    if(metaDesc) metaDesc.setAttribute('content', 'Download ' + (app.title || 'App') + ' MOD APK v' + (app.version || '') + ' for Android. ' + (app.size || '') + ' free download.');
+                    container.innerHTML = 
+                        '<div class="app-header">' +
+                            '<img src="' + (app.image_url || 'https://via.placeholder.com/150') + '" class="app-icon" alt="' + (app.title || 'App') + '">' +
+                            '<div class="app-info" style="flex:1;">' +
+                                '<h1>' + (app.title || 'Unknown') + (app.is_mod ? ' <span class="mod-badge-inline">MOD</span>' : '') + '</h1>' +
+                                '<a href="search.html?q=' + encodeURIComponent(app.developer || '') + '" class="dev">' + (app.developer || 'Unknown') + '</a>' +
+                                '<div class="app-specs">' +
+                                    '<div><strong>Version</strong> ' + (app.version || 'Varies') + '</div>' +
+                                    '<div><strong>Size</strong> ' + (app.size || 'Varies') + '</div>' +
+                                    '<div><strong>Category</strong> ' + (app.category || 'App') + '</div>' +
+                                    '<div><strong>Updated</strong> ' + updateDate + '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div style="text-align:center; padding: 20px;">' +
+                            '<button id="download-btn" class="download-btn" onclick="startDownloadTimer(\'' + (app.download_url || '').replace(/'/g, "\\'") + '\')">Download APK</button>' +
+                        '</div>' +
+                        '<div class="app-content">' +
+                            '<h3>Description</h3>' +
+                            '<div style="white-space: pre-wrap;">' + (app.description || 'No description provided.') + '</div>' +
+                            (app.whats_new ? '<h3>What\'s New</h3><div style="white-space: pre-wrap;">' + app.whats_new + '</div>' : '') +
+                        '</div>';
                 } else {
                     container.innerHTML = '<p class="error-state">App not found.</p>';
                 }
             } catch(e) {
+                console.error(e);
                 container.innerHTML = '<p class="error-state">Error loading app data.</p>';
             }
         }
         loadAppDetails();
     </script>
         
-    
+
     <footer>
         <div class="container footer-content">
             <div class="footer-col">
                 <h3>AN1 Clone</h3>
                 <p>Premium source for Android MOD APKs.</p>
                 <div class="contact-links">
-                    <a href="mailto:support@an1clone.com">✉️ support@an1clone.com</a><br>
-                    <a href="tel:+1234567890">📞 +1 234 567 890</a>
+                    <a href="mailto:support@an1clone.com">&#9993; support@an1clone.com</a><br>
+                    <a href="tel:+1234567890">&#128222; +1 234 567 890</a>
                 </div>
             </div>
             <div class="footer-col">
@@ -132,9 +134,9 @@
             </div>
             <div class="footer-col">
                 <h3>Legal</h3>
-                <a href="404.html">Privacy Policy</a>
-                <a href="404.html">Terms of Service</a>
-                <a href="404.html">DMCA</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="dmca.html">DMCA</a>
             </div>
         </div>
         <div class="copyright">
@@ -148,6 +150,21 @@
         });
     </script>
 
-    <script src="assets/js/main.js" type="module"></script>
+
+    <script type="module">
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if(themeToggle) {
+            themeToggle.innerHTML = currentTheme === 'dark' ? '&#9728;' : '&#127769;';
+            themeToggle.addEventListener('click', () => {
+                const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeToggle.innerHTML = newTheme === 'dark' ? '&#9728;' : '&#127769;';
+            });
+        }
+    </script>
+
 </body>
 </html>
