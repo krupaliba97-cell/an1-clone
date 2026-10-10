@@ -46,7 +46,7 @@ body {
     color: var(--text-main);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.5;
-    transition: background 0.25s ease, color 0.25s ease;
+    transition: background 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
     width: 100%;
     min-height: 100vh;
@@ -73,6 +73,29 @@ img {
     padding: 0 16px;
 }
 
+/* Inline SVG Icon Helpers */
+.icon, .icon-spec, .icon-star, .icon-shield, .icon-download, .icon-theme {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.icon-spec {
+    margin-right: 6px;
+    color: var(--primary);
+    vertical-align: text-bottom;
+}
+
+.icon-star {
+    margin-right: 3px;
+    vertical-align: -1px;
+}
+
+.icon-download {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
 /* Header & Navigation */
 header {
     background: var(--card-bg);
@@ -81,7 +104,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
-    transition: background 0.25s ease;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .header-wrap {
@@ -101,6 +124,11 @@ header {
     align-items: center;
     min-height: 48px;
     padding: 0 4px;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.logo:hover {
+    transform: scale(1.03);
 }
 
 .logo span {
@@ -122,12 +150,14 @@ header {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
-    transition: color 0.2s ease, background 0.2s ease;
+    position: relative;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .nav-links a:hover, .nav-links a:active {
     color: var(--primary);
     background: var(--primary-light);
+    transform: translateY(-1px);
 }
 
 /* Search Bar */
@@ -140,6 +170,12 @@ header {
     padding: 2px 6px 2px 14px;
     align-items: center;
     min-height: 44px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.search-bar:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(84, 178, 71, 0.15);
 }
 
 .search-bar input {
@@ -165,6 +201,12 @@ header {
     justify-content: center;
     font-size: 16px;
     border-radius: 50%;
+    transition: color 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.search-bar button:hover {
+    color: var(--primary);
+    transform: scale(1.1);
 }
 
 .header-actions {
@@ -185,25 +227,45 @@ header {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: transform 0.2s ease;
+    transition: background 0.2s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.theme-toggle:active {
-    transform: scale(0.9);
+.theme-toggle:hover {
+    background: var(--primary-light);
+}
+
+.theme-toggle:hover .icon-theme {
+    transform: rotate(20deg) scale(1.15);
+}
+
+.theme-toggle:active .icon-theme {
+    transform: rotate(180deg) scale(0.9);
+}
+
+.theme-toggle .icon-theme {
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .mobile-toggle {
     display: none;
-    font-size: 26px;
     cursor: pointer;
     color: var(--text-main);
-    min-width: 48px;
-    min-height: 48px;
+    min-width: 44px;
+    min-height: 44px;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
     background: transparent;
+    transition: background 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mobile-toggle:hover {
+    background: var(--primary-light);
+}
+
+.mobile-toggle:active {
+    transform: scale(0.92);
 }
 
 .desktop-search { display: flex; }
@@ -237,7 +299,7 @@ header {
     font-size: 13px;
     font-weight: 600;
     border: 1px solid var(--border-color);
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -245,10 +307,24 @@ header {
     flex-shrink: 0;
 }
 
-.chip:hover, .chip:active {
+.chip .icon {
+    transition: transform 0.2s ease;
+}
+
+.chip:hover {
     background: var(--primary);
     color: #ffffff;
     border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(84, 178, 71, 0.3);
+}
+
+.chip:hover .icon {
+    transform: scale(1.15);
+}
+
+.chip:active {
+    transform: scale(0.95);
 }
 
 /* Breadcrumbs */
@@ -260,11 +336,13 @@ header {
     gap: 6px;
     align-items: center;
     flex-wrap: wrap;
+    animation: fadeIn 0.3s ease;
 }
 
 .breadcrumbs a {
     color: var(--primary);
     font-weight: 600;
+    transition: color 0.2s ease;
 }
 
 .breadcrumbs a:hover {
@@ -286,6 +364,63 @@ header {
     padding-bottom: 4px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    position: relative;
+}
+
+/* Motion Graphic Keyframes */
+@keyframes cardEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(18px) scale(0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes badgeSheen {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes shieldFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+@keyframes radarPulse {
+    0% { box-shadow: 0 0 0 0 rgba(84, 178, 71, 0.3); }
+    70% { box-shadow: 0 0 0 10px rgba(84, 178, 71, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(84, 178, 71, 0); }
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(84, 178, 71, 0.6); }
+    70% { box-shadow: 0 0 0 16px rgba(84, 178, 71, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(84, 178, 71, 0); }
+}
+
+@keyframes skeletonWave {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes menuSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* Grid & AN1-Style Squircle App Cards */
@@ -307,14 +442,40 @@ header {
     align-items: center;
     text-align: center;
     position: relative;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    overflow: hidden;
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease, border-color 0.28s ease;
     box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     min-height: 220px;
+    animation: cardEntrance 0.35s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* Specular Shimmer Reflection Sweep on Hover */
+.card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        60deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.15) 50%,
+        transparent 60%
+    );
+    transform: rotate(25deg) translateY(-100%);
+    transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.card:hover::before {
+    transform: rotate(25deg) translateY(100%);
 }
 
 .card:hover, .card:focus-visible {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.07);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.08), 0 0 0 1px var(--primary);
     border-color: var(--primary);
 }
 
@@ -324,37 +485,52 @@ header {
     aspect-ratio: 1 / 1;
     border-radius: 18px;
     overflow: hidden;
-    background: var(--skeleton-bg);
+    background: linear-gradient(90deg, var(--skeleton-bg) 25%, var(--border-color) 50%, var(--skeleton-bg) 75%);
+    background-size: 200% 100%;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     margin-bottom: 12px;
     flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.card:hover .card-icon-wrap {
+    transform: scale(1.08) rotate(-1deg);
+    box-shadow: 0 8px 18px rgba(84, 178, 71, 0.3);
 }
 
 .card-icon {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.35s ease;
 }
 
 .card:hover .card-icon {
-    transform: scale(1.05);
+    transform: scale(1.06);
 }
 
+/* Animated MOD Badge */
 .badge {
     position: absolute;
     top: 8px;
     right: 8px;
-    background: var(--badge-mod);
+    background: linear-gradient(135deg, #ff9800, #ffb74d, #f57c00, #ff9800);
+    background-size: 300% 300%;
+    animation: badgeSheen 4s ease infinite;
     color: #ffffff;
     font-size: 10px;
     font-weight: 800;
-    padding: 3px 7px;
+    padding: 3px 8px;
     border-radius: 6px;
     text-transform: uppercase;
     z-index: 2;
     letter-spacing: 0.5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.35);
+    transition: transform 0.2s ease;
+}
+
+.card:hover .badge {
+    transform: scale(1.06);
 }
 
 .card-content {
@@ -377,6 +553,11 @@ header {
     overflow: hidden;
     word-break: break-word;
     width: 100%;
+    transition: color 0.2s ease;
+}
+
+.card:hover .card-title {
+    color: var(--primary);
 }
 
 .card-dev {
@@ -397,6 +578,11 @@ header {
     font-weight: 700;
     color: var(--gold);
     margin-bottom: 8px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover .card-rating {
+    transform: scale(1.05);
 }
 
 .card-meta {
@@ -418,6 +604,7 @@ header {
     padding: 2px 8px;
     border-radius: 6px;
     border: 1px solid var(--border-color);
+    transition: background 0.2s ease;
 }
 
 .meta-cat {
@@ -433,10 +620,11 @@ header {
     display: flex;
     gap: 24px;
     align-items: flex-start;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
     border: 1px solid var(--border-color);
     flex-wrap: wrap;
     width: 100%;
+    animation: fadeIn 0.35s ease;
 }
 
 .app-icon {
@@ -445,9 +633,14 @@ header {
     aspect-ratio: 1 / 1;
     border-radius: 24px;
     object-fit: cover;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
     background: var(--skeleton-bg);
     flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.app-icon:hover {
+    transform: scale(1.05) rotate(-1deg);
 }
 
 .app-info {
@@ -468,6 +661,12 @@ header {
     font-size: 15px;
     margin-bottom: 12px;
     display: inline-block;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.app-info .dev:hover {
+    transform: translateX(2px);
+    color: var(--primary-dark);
 }
 
 .app-specs {
@@ -491,22 +690,22 @@ header {
     text-transform: uppercase;
 }
 
-/* Safety Trust Badge */
+/* Safety Trust Badge with Breathing Glow */
 .safety-badge {
     display: flex;
     align-items: center;
     gap: 12px;
     background: var(--primary-light);
-    border: 1px solid rgba(84, 178, 71, 0.3);
-    padding: 12px 18px;
-    border-radius: 12px;
+    border: 1px solid rgba(84, 178, 71, 0.35);
+    padding: 14px 18px;
+    border-radius: 14px;
     margin: 16px 0;
     width: 100%;
+    animation: radarPulse 3.5s infinite;
 }
 
-.safety-badge .shield-icon {
-    font-size: 24px;
-    line-height: 1;
+.safety-badge .icon-shield {
+    animation: shieldFloat 2.8s ease-in-out infinite;
 }
 
 .safety-badge strong {
@@ -525,10 +724,11 @@ header {
 .mod-info-box {
     background: var(--badge-mod-bg);
     border-left: 4px solid var(--badge-mod);
-    border-radius: 10px;
-    padding: 16px;
+    border-radius: 12px;
+    padding: 16px 20px;
     margin: 16px 0;
     width: 100%;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.1);
 }
 
 .mod-info-box h4 {
@@ -548,13 +748,7 @@ header {
     color: var(--text-main);
 }
 
-/* Download Button with Progress Glow Animation */
-@keyframes pulseGlow {
-    0% { box-shadow: 0 0 0 0 rgba(84, 178, 71, 0.6); }
-    70% { box-shadow: 0 0 0 16px rgba(84, 178, 71, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(84, 178, 71, 0); }
-}
-
+/* Download Button with Magnetic Press & Pulse Glow */
 .download-btn {
     display: inline-flex;
     align-items: center;
@@ -562,28 +756,32 @@ header {
     gap: 8px;
     background: var(--primary);
     color: #ffffff !important;
-    padding: 16px 28px;
+    padding: 16px 32px;
     border-radius: 14px;
     font-size: 18px;
     font-weight: 800;
     margin: 20px auto;
-    transition: all 0.25s ease;
     text-align: center;
     width: 100%;
     max-width: 380px;
     min-height: 56px;
-    box-shadow: 0 6px 16px rgba(84, 178, 71, 0.35);
+    box-shadow: 0 6px 18px rgba(84, 178, 71, 0.35);
     border: none;
     cursor: pointer;
     touch-action: manipulation;
-}
-
-.download-btn:active {
-    transform: scale(0.98);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background 0.25s ease;
 }
 
 .download-btn:hover {
     background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(84, 178, 71, 0.45);
+}
+
+.download-btn:active {
+    transform: translateY(1px) scale(0.98);
 }
 
 .download-btn.ready {
@@ -600,6 +798,7 @@ header {
     border: 1px solid var(--border-color);
     line-height: 1.7;
     word-break: break-word;
+    animation: fadeIn 0.4s ease;
 }
 
 .app-content h3 {
@@ -665,13 +864,14 @@ header {
     outline: none;
     font-size: 16px;
     min-height: 48px;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
     border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(84, 178, 71, 0.15);
 }
 
 .form-row {
@@ -690,6 +890,13 @@ header {
     padding: 12px 0;
     border-bottom: 1px solid var(--border-color);
     gap: 12px;
+    transition: background 0.2s ease;
+}
+
+.list-item:hover {
+    background: var(--primary-light);
+    border-radius: 8px;
+    padding: 12px 6px;
 }
 
 .list-item img {
@@ -723,6 +930,12 @@ header {
     min-width: 64px;
     font-weight: 600;
     font-size: 14px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.list-actions button:hover {
+    background: #dc2626;
+    transform: scale(1.05);
 }
 
 #login-section {
@@ -790,11 +1003,12 @@ footer {
     margin-bottom: 4px;
     font-size: 15px;
     min-height: 44px;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .footer-col a:hover {
     color: var(--primary);
+    transform: translateX(3px);
 }
 
 .contact-links a {
@@ -804,6 +1018,12 @@ footer {
     padding: 4px 0;
     color: var(--text-main);
     font-weight: 600;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.contact-links a:hover {
+    color: var(--primary);
+    transform: translateX(3px);
 }
 
 .copyright {
@@ -824,6 +1044,7 @@ footer {
     border-radius: 14px;
     border: 1px dashed var(--border-color);
     font-size: 15px;
+    animation: fadeIn 0.4s ease;
 }
 
 .error-state {
@@ -835,6 +1056,7 @@ footer {
     border-radius: 14px;
     border: 1px solid #fecaca;
     font-size: 15px;
+    animation: fadeIn 0.4s ease;
 }
 
 .mod-badge-inline {
@@ -869,7 +1091,10 @@ footer {
         gap: 6px;
     }
 
-    .nav-links.active { display: flex; }
+    .nav-links.active {
+        display: flex;
+        animation: menuSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
     .nav-links a {
         width: 100%;
@@ -953,4 +1178,13 @@ select:focus-visible,
 textarea:focus-visible {
     outline: 3px solid var(--primary);
     outline-offset: 2px;
+}
+
+/* Accessibility: Respect Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
