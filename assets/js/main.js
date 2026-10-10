@@ -21,27 +21,28 @@ export function sanitizeUrl(url, fallback = 'https://via.placeholder.com/300') {
     return fallback;
 }
 
-// Generate App Card HTML with complete XSS Protection
+// Generate App Card HTML with AN1-Style Squircle Icon Layout
 export function createAppCard(app) {
     const rawId = encodeURIComponent(app.id || '');
     const title = escapeHTML(app.title || 'Unknown App');
     const developer = escapeHTML(app.developer || 'Unknown');
     const size = escapeHTML(app.size || 'N/A');
-    const category = escapeHTML(app.category || '');
+    const category = escapeHTML(app.category || 'App');
     const imageUrl = sanitizeUrl(app.image_url);
 
     return `
-        <a href="app.html?id=${rawId}" class="card">
-            ${app.is_mod ? '<div class="badge">MOD</div>' : ''}
-            <div class="card-img-wrap">
-                <img src="${imageUrl}" alt="${title}" class="card-img" loading="lazy">
+        <a href="app.html?id=${rawId}" class="card" aria-label="${title}">
+            ${app.is_mod ? '<span class="badge">MOD</span>' : ''}
+            <div class="card-icon-wrap">
+                <img src="${imageUrl}" alt="${title}" class="card-icon" loading="lazy" width="76" height="76">
             </div>
             <div class="card-content">
                 <div class="card-title">${title}</div>
                 <div class="card-dev">${developer}</div>
+                <div class="card-rating">★ 4.8</div>
                 <div class="card-meta">
-                    <span>${size}</span>
-                    <span>${category}</span>
+                    <span class="meta-tag">${size}</span>
+                    <span class="meta-cat">${category}</span>
                 </div>
             </div>
         </a>
