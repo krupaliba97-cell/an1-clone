@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body style="background: #f4f6f9; display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <div style="background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px;">
+        <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary-color);">Admin Panel</h2>
+        
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align:center;">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <div style="margin-bottom: 15px;">
+                <label>Username (admin)</label>
+                <input type="text" name="username" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px;" required>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label>Password (admin123)</label>
+                <input type="password" name="password" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px;" required>
+            </div>
+            <button type="submit" class="btn btn-green" style="width: 100%;">Login</button>
+        </form>
+    </div>
+</body>
+</html>
