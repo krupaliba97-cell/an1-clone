@@ -2,23 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results - AN1 Clone</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Download Premium MOD APKs, Games, and Programs for Android. 100% safe, fast, and free.">
+    <link rel="icon" href="https://via.placeholder.com/32/54b247/ffffff?text=A" type="image/png">
     <link rel="stylesheet" href="assets/css/style.css">
+
 </head>
 <body>
+    
     <header>
         <div class="container header-wrap">
             <a href="index.html" class="logo">AN1<span>.Clone</span></a>
-            <div class="nav-links">
+            <div class="mobile-toggle" id="mobile-toggle">☰</div>
+            
+            <div class="nav-links" id="nav-links">
                 <a href="index.html">Home</a>
                 <a href="category.html?c=Games">Games</a>
                 <a href="category.html?c=Programs">Programs</a>
-                <a href="admin.html" style="font-size: 12px; color: var(--text-muted);">Admin</a>
+                <a href="admin.html" class="admin-link">Admin Panel</a>
+                
+                <form action="search.html" method="GET" class="search-bar mobile-search">
+                    <input type="text" name="q" placeholder="Search..." required>
+                    <button type="submit">🔍</button>
+                </form>
             </div>
-            <div style="display:flex; align-items:center;">
-                <form action="search.html" method="GET" class="search-bar">
-                    <input type="text" name="q" placeholder="Search games & apps..." required>
+
+            <div class="header-actions">
+                <form action="search.html" method="GET" class="search-bar desktop-search">
+                    <input type="text" name="q" placeholder="Search..." required>
                     <button type="submit">🔍</button>
                 </form>
                 <button id="theme-toggle" class="theme-toggle">🌙</button>
@@ -26,58 +39,73 @@
         </div>
     </header>
 
-    <div class="container" style="margin-top: 30px;">
+    
+    <div class="container" style="margin-top: 30px; min-height: 60vh;">
         <h2 class="section-title">Search Results for: <span id="search-query" style="color:var(--primary);"></span></h2>
         <div class="grid" id="search-grid">
             <div class="loader"></div>
         </div>
     </div>
-
     <script type="module">
         import { db, ref, get } from './assets/js/firebase-config.js';
         import { createAppCard } from './assets/js/main.js';
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const query = urlParams.get('q');
-        
+        const query = new URLSearchParams(window.location.search).get('q');
         document.getElementById('search-query').innerText = query || '';
-
         async function performSearch() {
             const grid = document.getElementById('search-grid');
-            if(!query) {
-                grid.innerHTML = '<p>Please enter a search term.</p>';
-                return;
-            }
-
+            if(!query) return grid.innerHTML = '<p class="empty-state">Please enter a search term.</p>';
             try {
                 const snapshot = await get(ref(db, 'apps'));
                 if(snapshot.exists()) {
-                    const data = snapshot.val();
-                    let apps = Object.keys(data).map(key => ({id: key, ...data[key]}));
-                    
                     const qLower = query.toLowerCase();
-                    apps = apps.filter(a => 
-                        (a.title && a.title.toLowerCase().includes(qLower)) || 
-                        (a.developer && a.developer.toLowerCase().includes(qLower))
-                    );
-                    
+                    let apps = Object.keys(snapshot.val()).map(key => ({id: key, ...snapshot.val()[key]})).filter(a => (a.title && a.title.toLowerCase().includes(qLower)) || (a.developer && a.developer.toLowerCase().includes(qLower)));
                     apps.sort((a,b) => b.timestamp - a.timestamp);
-                    
-                    if(apps.length > 0) {
-                        grid.innerHTML = apps.map(app => createAppCard(app)).join('');
-                    } else {
-                        grid.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1;">No results found.</p>';
-                    }
+                    grid.innerHTML = apps.length ? apps.map(app => createAppCard(app)).join('') : '<p class="empty-state">No results found.</p>';
                 } else {
-                    grid.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1;">No apps found in database.</p>';
+                    grid.innerHTML = '<p class="empty-state">No apps in database.</p>';
                 }
             } catch(e) {
-                console.error(e);
-                grid.innerHTML = '<p style="color:red; grid-column: 1/-1;">Error loading data.</p>';
+                grid.innerHTML = '<p class="error-state">Error loading data.</p>';
             }
         }
-
         performSearch();
     </script>
+        
+    
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h3>AN1 Clone</h3>
+                <p>Premium source for Android MOD APKs.</p>
+                <div class="contact-links">
+                    <a href="mailto:support@an1clone.com">✉️ support@an1clone.com</a><br>
+                    <a href="tel:+1234567890">📞 +1 234 567 890</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <a href="index.html">Home</a>
+                <a href="category.html?c=Games">Games</a>
+                <a href="category.html?c=Programs">Programs</a>
+            </div>
+            <div class="footer-col">
+                <h3>Legal</h3>
+                <a href="404.html">Privacy Policy</a>
+                <a href="404.html">Terms of Service</a>
+                <a href="404.html">DMCA</a>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; <span id="year"></span> AN1 Clone. All rights reserved.
+        </div>
+    </footer>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        document.getElementById('mobile-toggle').addEventListener('click', function() {
+            document.getElementById('nav-links').classList.toggle('active');
+        });
+    </script>
+
+    <script src="assets/js/main.js" type="module"></script>
 </body>
 </html>
