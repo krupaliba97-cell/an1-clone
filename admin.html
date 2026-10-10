@@ -264,6 +264,19 @@
             }
         });
     </script>
-    <script src="assets/js/main.js" type="module"></script>
+    <script type="module">
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if(themeToggle) {
+            themeToggle.innerHTML = currentTheme === 'dark' ? '☀️' : '🌙';
+            themeToggle.addEventListener('click', () => {
+                const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeToggle.innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
+            });
+        }
+    </script>
 </body>
 </html>
