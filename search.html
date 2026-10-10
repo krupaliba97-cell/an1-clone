@@ -52,7 +52,7 @@
         document.getElementById('search-query').innerText = query || '';
         async function performSearch() {
             const grid = document.getElementById('search-grid');
-            if(!query) return grid.innerHTML = '<p class="empty-state">Please enter a search term.</p>';
+            if(!query || query.trim() === '') return grid.innerHTML = '<p class="empty-state">Please enter a valid search term.</p>';
             try {
                 const snapshot = await get(ref(db, 'apps'));
                 if(snapshot.exists()) {
