@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Details - AN1 Clone</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-wrap">
+            <a href="index.html" class="logo">AN1<span>.Clone</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="category.html?c=Games">Games</a>
+                <a href="category.html?c=Programs">Programs</a>
+                <a href="admin.html" style="font-size: 12px; color: var(--text-muted);">Admin</a>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <form action="search.html" method="GET" class="search-bar">
+                    <input type="text" name="q" placeholder="Search games & apps..." required>
+                    <button type="submit">🔍</button>
+                </form>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" id="app-container">
+        <div class="loader" style="margin-top: 50px;"></div>
+    </div>
+
+    <script type="module">
+        import { db, ref, get } from './assets/js/firebase-config.js';
+
+        // Timer Logic for Download Button
+        window.startDownloadTimer = function(url) {
+            const btn = document.getElementById('download-btn');
+            let timeLeft = 3;
+            btn.innerHTML = `Please wait ${timeLeft}s...`;
+            btn.style.background = "#999";
+            btn.style.pointerEvents = "none";
+            
+            const timer = setInterval(() => {
+                timeLeft--;
+                if(timeLeft <= 0) {
+                    clearInterval(timer);
+                    btn.innerHTML = `Click to Download`;
+                    btn.style.background = "var(--primary)";
+                    btn.style.pointerEvents = "auto";
+                    btn.onclick = () => { window.location.href = url; };
+                } else {
+                    btn.innerHTML = `Please wait ${timeLeft}s...`;
+                }
+            }, 1000);
+        }
+
+        async function loadAppDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const container = document.getElementById('app-container');
+
+            if(!id) {
+                container.innerHTML = '<p>No App ID provided.</p>';
+                return;
+            }
+
+            try {
+                const snapshot = await get(ref(db, 'apps/' + id));
+                if(snapshot.exists()) {
+                    const app = snapshot.val();
+                    
+                    const updateDate = new Date(app.timestamp).toLocaleDateString();
+                    
+                    container.innerHTML = `
+                        <div class="app-header">
+                            <img src="${app.image_url || 'https://via.placeholder.com/150'}" class="app-icon" alt="${app.title}">
+                            <div class="app-info" style="flex:1;">
+                                <h1>${app.title} ${app.is_mod ? '<span style="color:var(--badge-mod);font-size:16px;vertical-align:middle;margin-left:10px;">[MOD]</span>' : ''}</h1>
+                                <a href="search.html?q=${app.developer}" class="dev">${app.developer}</a>
+                                
+                                <div class="app-specs">
+                                    <div><strong>Version</strong> ${app.version || 'Varies'}</div>
+                                    <div><strong>Size</strong> ${app.size || 'Varies'}</div>
+                                    <div><strong>Category</strong> ${app.category || 'App'}</div>
+                                    <div><strong>Updated</strong> ${updateDate}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align:center;">
+                            <button id="download-btn" class="download-btn" onclick="startDownloadTimer('${app.download_url}')">Download APK</button>
+                        </div>
+
+                        <div class="app-content">
+                            <h3>Description</h3>
+                            <div style="white-space: pre-wrap;">${app.description || 'No description provided.'}</div>
+                            
+                            ${app.whats_new ? `<h3>What's New</h3><div style="white-space: pre-wrap;">${app.whats_new}</div>` : ''}
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = '<p style="color:red; margin-top:20px;">App not found.</p>';
+                }
+            } catch(e) {
+                console.error(e);
+                container.innerHTML = '<p style="color:red;">Error loading app data.</p>';
+            }
+        }
+
+        loadAppDetails();
+    </script>
+    <script src="assets/js/main.js" type="module"></script>
+</body>
+</html>
