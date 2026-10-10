@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}{{ category.name }} - AN1 Clone{% endblock %}
+{% block content %}
+<section class="latest-games" style="margin-top: 30px;">
+    <h2 class="section-title">{{ category.name | upper }}</h2>
+    <div class="games-grid">
+        {% for app in apps %}
+        <div class="game-card" onclick="window.location.href='{{ url_for('single_app', app_id=app.id) }}'">
+            {% if app.is_mod %}
+            <div class="game-badge">MOD</div>
+            {% endif %}
+            {% if app.image %}
+            <img src="{{ url_for('static', filename='uploads/' + app.image) }}" alt="{{ app.title }}" class="game-img">
+            {% else %}
+            <div class="game-img" style="background:#eee;display:flex;align-items:center;justify-content:center;color:#999;">No Image</div>
+            {% endif %}
+            <div class="game-info">
+                <div class="game-title">{{ app.title }}</div>
+                <div class="game-dev">{{ app.developer }}</div>
+            </div>
+        </div>
+        {% else %}
+        <p>No {{ category.name | lower }} uploaded yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
