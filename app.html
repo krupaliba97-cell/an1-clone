@@ -46,7 +46,12 @@
         import { db, ref, get } from './assets/js/firebase-config.js';
         window.startDownloadTimer = function(url) {
             const btn = document.getElementById('download-btn');
-            if(!url || url === 'undefined') { alert('No download link provided!'); return; }
+            if(!url || url === 'undefined' || url.trim() === '') { 
+                btn.innerHTML = 'Link Unavailable';
+                btn.style.background = '#e74c3c';
+                btn.style.pointerEvents = 'none';
+                return; 
+            }
             let timeLeft = 3;
             btn.innerHTML = `Please wait ${timeLeft}s...`;
             btn.style.background = "#999";
